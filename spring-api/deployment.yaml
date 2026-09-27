@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spring-api
+  template:
+    metadata:
+      labels:
+        app: spring-api
+    spec:
+      containers:
+      - name: spring-api
+        # The image we just build, can be found using `oc describe is spring-api`, swapping the tag for :latest
+        image: image-registry.openshift-image-registry.svc:5000/sebastian-mammoliti-dev/spring-api:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080

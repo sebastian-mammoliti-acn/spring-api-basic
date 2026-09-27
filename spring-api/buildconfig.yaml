@@ -1,0 +1,23 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: spring-api
+spec:
+  # Tell openshift to use Git to build the image.
+  source:
+    type: Git
+    git:
+      uri: https://github.com/sebastian-mammoliti-acn/spring-api-basic.git
+      ref: tutorial-2-start
+  # Note that we need to use the dockerfile in the git repo
+  strategy:
+    type: Docker
+    dockerStrategy:
+      dockerfilePath: Dockerfile
+  # Link up to image stream
+  output:
+    to:
+      kind: ImageStreamTag
+      name: spring-api:latest
+  triggers:
+    - type: ConfigChange
