@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak
+  labels:
+    app: keycloak
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keycloak
+  template:
+    metadata:
+      labels:
+        app: keycloak
+    spec:
+      containers:
+        - name: keycloak
+          image: quay.io/keycloak/keycloak:latest
+          imagePullPolicy: IfNotPresent
+          args:
+            - start-dev
+            - --import-realm
+            - --proxy-headers=xforwarded
+            - --health-enabled=true
+            - --http-enabled=true
+          envFrom:
+            - secretRef:
+                name: keycloak-admin
+          env:
+            - name: SPRING_API_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: spring-api-client
+                  key: client-secret
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+            - name: management
+              containerPort: 9000
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+            limits:
+              cpu: 500m
+              memory: 1Gi
+          #volumeMounts:
+          #  - name: realm-import
+          #    mountPath: /opt/keycloak/data/import
+          #    readOnly: true
+      #volumes:
+      #  - name: realm-import
+      #    configMap:
+      #      name: keycloak-realm
