@@ -24,12 +24,11 @@ public class SecurityConfig {
                     "/actuator/health/liveness",
                     "/actuator/health/readiness"
                 ).permitAll()
-                .requestMatchers("/hello").authenticated()
                 .anyRequest().authenticated()
             )
             .oauth2ResourceServer(oauth2 ->
                 oauth2.jwt(Customizer.withDefaults())
             )
-            .build();
+        .build();
     }
 }
