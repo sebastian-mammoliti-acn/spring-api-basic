@@ -7,6 +7,8 @@ WORKDIR /workspace
 # Clone the application code to the container
 RUN git clone https://github.com/sebastian-mammoliti-acn/spring-api-basic.git .
 
+RUN git checkout tutorial-2-start
+
 # Build the application
 RUN mvn clean package -DskipTests
 
